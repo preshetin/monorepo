@@ -3,14 +3,15 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from .database import get_db
 from .schemas import ProductCreate, ProductResponse
 from .crud import get_product_by_artikul, create_product
-from .scheduler import start_scheduler, schedule_product_update
+# from .scheduler import start_scheduler, schedule_product_update
 import aiohttp
 
 app = FastAPI()
 
 @app.on_event("startup")
 async def startup_event():
-    await start_scheduler()
+    # await start_scheduler()
+    pass
 
 @app.post("/api/v1/products", response_model=ProductResponse)
 async def create_product_endpoint(product: ProductCreate, db: AsyncSession = Depends(get_db)):
@@ -27,7 +28,7 @@ async def create_product_endpoint(product: ProductCreate, db: AsyncSession = Dep
 
 @app.get("/api/v1/subscribe/{artikul}")
 async def subscribe_product_endpoint(artikul: int, db: AsyncSession = Depends(get_db)):
-    await schedule_product_update(artikul, db)
+    # await schedule_product_update(artikul, db)
     return {"message": "Subscription started"}
 
 async def fetch_product_data(artikul: int):
