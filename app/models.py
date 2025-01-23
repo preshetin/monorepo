@@ -8,9 +8,9 @@ from sqlalchemy import Column, Integer, String, Float
 env_path = os.path.join(os.path.dirname(__file__), '..', '.env')
 load_dotenv(env_path)
 
-DATABASE_URL = os.getenv("DATABASE_URL_ASYNC")
+DATABASE_URL_ASYNC = os.getenv("DATABASE_URL_ASYNC")
 
-engine = create_async_engine(DATABASE_URL, echo=True)
+engine = create_async_engine(DATABASE_URL_ASYNC, echo=True)
 SessionLocal = sessionmaker(
     bind=engine,
     class_=AsyncSession,
