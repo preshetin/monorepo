@@ -22,3 +22,10 @@ async def create_product(db: AsyncSession, product_data: dict):
     await db.commit()
     await db.refresh(product)
     return product
+
+async def update_product(db: AsyncSession, existing_product: Product, product_data: dict):
+    for key, value in product_data.items():
+        setattr(existing_product, key, value)
+    await db.commit()
+    await db.refresh(existing_product)
+    return existing_product
