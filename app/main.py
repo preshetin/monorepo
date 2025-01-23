@@ -40,20 +40,19 @@ async def fetch_product_data(artikul: int):
         async with session.get(url) as response:
             if response.status == 200:
                 data = await response.json()
-                # Extract necessary fields from the response
-
-
 
                 # Extract the product information
                 product = data['data']['products'][0]
+
                 # Extract the required fields
                 product_name = product['name']
                 article_number = product['id']
                 price = product['priceU'] / 100  # Assuming the price is in cents
                 rating = product['rating']
+                
                 # Calculate the total quantity across all stocks
                 total_quantity = sum(stock['qty'] for stock in product['sizes'][0]['stocks'])                
-                        # Create the product data object
+
                 product_data = {
                     'name': product_name,
                     'artikul': article_number,
@@ -63,16 +62,4 @@ async def fetch_product_data(artikul: int):
                 }
 
                 return product_data
-                
-                
-
-                # This is a placeholder, adjust according to the actual response structure
-                product_info = data.get("data", {}).get("products", [])[0]
-                return {
-                    "artikul": artikul,
-                    "name": product_info.get("name"),
-                    "price": product_info.get("price"),
-                    "rating": product_info.get("rating"),
-                    "total_quantity": product_info.get("total_quantity")
-                }
     return None
