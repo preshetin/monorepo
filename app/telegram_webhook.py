@@ -20,7 +20,7 @@ router = Router()
 def get_main_keyboard():
     builder = InlineKeyboardBuilder()
     builder.add(types.InlineKeyboardButton(
-        text="Get product data", 
+        text="Получить данные по товару", 
         callback_data="get_product"
     ))
     return builder.as_markup()
@@ -28,13 +28,13 @@ def get_main_keyboard():
 @router.message(CommandStart())
 async def cmd_start(message: Message):
     await message.answer(
-        "Welcome! Click the button below to get product data:",
+        "Привет! Нажмите на кнопку, чтобы получить инфо по товару:",
         reply_markup=get_main_keyboard()
     )
 
 @router.callback_query(lambda c: c.data == "get_product")
 async def process_get_product(callback: CallbackQuery):
-    await callback.message.answer("Please enter the article number:")
+    await callback.message.answer("Введите артикул:")
     await callback.answer()
 
 @router.message()
@@ -48,16 +48,17 @@ async def handle_article(message: Message):
             product = await get_product_by_artikul(db, artikul)
             if product:
                 response = (
-                    f"Product Information:\n"
-                    f"Name: {product.name}\n"
-                    f"Article: {product.artikul}\n"
-                    f"Price: {product.price} RUB"
+                    f"**{product.name}**\n\n"
+                    f"Артикул: {product.artikul}\n"
+                    f"На всех складах: {product.total_quantity} шт" 
+                    f"Рейтинг: {product.rating}"
+                    f"Цена: {product.price}₽"
                 )
                 await message.answer(response, reply_markup=get_main_keyboard())
             else:
-                await message.answer("Product not found!", reply_markup=get_main_keyboard())
+                await message.answer("Товар не найден!", reply_markup=get_main_keyboard())
     except ValueError:
-        await message.answer("Please enter a valid article number!", reply_markup=get_main_keyboard())
+        await message.answer("Введите правильный номер артикула!", reply_markup=get_main_keyboard())
     except Exception as e:
         await message.answer(f"Error: {str(e)}", reply_markup=get_main_keyboard())
 
