@@ -43,10 +43,12 @@ async def create_product_endpoint(product: ProductCreate, db: AsyncSession = Dep
     new_product = await create_product(db, product_data)
     return new_product
 
-@app.get("/api/v1/subscribe/{artikul}")
-async def subscribe_product_endpoint(artikul: int, db: AsyncSession = Depends(get_db)):
-    # await schedule_product_update(artikul, db)
-    return {"message": "Subscription started"}
+# TODO: я не успел реализовать /api/v1/subscribe/{artikul} эндпоинт.
+ 
+# @app.get("/api/v1/subscribe/{artikul}")
+# async def subscribe_product_endpoint(artikul: int, db: AsyncSession = Depends(get_db)):
+#     # await schedule_product_update(artikul, db)
+#     return {"message": "Subscription started"}
 
 async def fetch_product_data(artikul: int):
     url = f"https://card.wb.ru/cards/v1/detail?appType=1&curr=rub&dest=-1257786&spp=30&nm={artikul}"

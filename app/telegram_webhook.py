@@ -62,11 +62,5 @@ async def handle_article(message: Message):
     except Exception as e:
         await message.answer(f"Error: {str(e)}", reply_markup=get_main_keyboard())
 
-# @app.post(f"/api/v1/webhook")
-# async def telegram_webhook(update: dict):
-#     telegram_event = types.Update(**update)
-#     await dp.feed_update(bot=bot, update=telegram_event)
-#     return {"ok": True}
-
 # Register router
 dp.include_router(router)
