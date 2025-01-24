@@ -7,6 +7,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from dotenv import load_dotenv
 
 from app.crud import get_product_by_artikul
+from app.models import SessionLocal
 
 load_dotenv()
 
@@ -38,9 +39,12 @@ async def process_get_product(callback: CallbackQuery):
 
 @router.message()
 async def handle_article(message: Message):
+    print(111)
+    print(message)
+    print(222)
     try:
         artikul = int(message.text)
-        async with AsyncSession() as db:
+        async with SessionLocal() as db:
             product = await get_product_by_artikul(db, artikul)
             if product:
                 response = (
