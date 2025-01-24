@@ -52,7 +52,7 @@ async def handle_article(message: Message):
                     f"Артикул: {product.artikul}\n"
                     f"На всех складах: {product.total_quantity} шт\n" 
                     f"Рейтинг: {product.rating}\n"
-                    f"Цена: {product.price}₽"
+                    f"Цена cо скидкой: {product.price}₽"
                 )
                 await message.answer(response, reply_markup=get_main_keyboard())
             else:
