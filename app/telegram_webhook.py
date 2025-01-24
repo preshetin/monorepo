@@ -1,4 +1,3 @@
-from fastapi import FastAPI, Depends, HTTPException
 import os
 from sqlalchemy.ext.asyncio import AsyncSession
 from aiogram import Bot, Dispatcher, Router, types
@@ -64,5 +63,5 @@ async def handle_article(message: Message):
 #     await dp.feed_update(bot=bot, update=telegram_event)
 #     return {"ok": True}
 
-# # Register router
-# dp.include_router(router)
+# Register router
+dp.include_router(router)

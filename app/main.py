@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from .database import get_db
 from .schemas import ProductCreate, ProductResponse
-from .telegram_webhook import bot, dp, router
+from .telegram_webhook import bot, dp
 from aiogram import types
 from .crud import get_product_by_artikul, create_product, update_product
 # from .scheduler import start_scheduler, schedule_product_update
@@ -10,8 +10,6 @@ import aiohttp
 
 app = FastAPI()
 
-# Include telegram router
-app.include_router(router)
 
 @app.on_event("startup")
 async def startup_event():
