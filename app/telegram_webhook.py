@@ -48,10 +48,10 @@ async def handle_article(message: Message):
             product = await get_product_by_artikul(db, artikul)
             if product:
                 response = (
-                    f"**{product.name}**\n\n"
+                    f"{product.name}\n\n"
                     f"Артикул: {product.artikul}\n"
-                    f"На всех складах: {product.total_quantity} шт" 
-                    f"Рейтинг: {product.rating}"
+                    f"На всех складах: {product.total_quantity} шт\n" 
+                    f"Рейтинг: {product.rating}\n"
                     f"Цена: {product.price}₽"
                 )
                 await message.answer(response, reply_markup=get_main_keyboard())
