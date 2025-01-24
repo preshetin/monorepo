@@ -13,6 +13,10 @@ async def startup_event():
     # await start_scheduler()
     pass
 
+@app.get("/")
+async def read_root():
+    return {"message": "Hello, World!"}
+
 @app.post("/api/v1/products", response_model=ProductResponse)
 async def create_product_endpoint(product: ProductCreate, db: AsyncSession = Depends(get_db)):
     product_data = await fetch_product_data(product.artikul)
