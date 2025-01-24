@@ -61,7 +61,7 @@ async def fetch_product_data(artikul: int):
                 # Extract the required fields
                 product_name = product['name']
                 article_number = product['id']
-                price = product['priceU'] / 100  # Assuming the price is in cents
+                price = product['salePriceU'] / 100  # Assuming the price is in cents
                 rating = product['rating']
                 
                 # Calculate the total quantity across all stocks
