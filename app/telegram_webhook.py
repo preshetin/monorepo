@@ -6,7 +6,8 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from dotenv import load_dotenv
 
-from app.crud import get_product_by_artikul
+from app.crud import create_product, get_product_by_artikul, update_product
+from app.fetch_product_data import fetch_product_data
 from app.models import SessionLocal
 
 load_dotenv()
@@ -39,24 +40,32 @@ async def process_get_product(callback: CallbackQuery):
 
 @router.message()
 async def handle_article(message: Message):
-    print(111)
-    print(message)
-    print(222)
     try:
         artikul = int(message.text)
+        # Fetch product data from WB API
+        product_data = await fetch_product_data(artikul)
+        if not product_data:
+            await message.answer("Товар не найден!", reply_markup=get_main_keyboard())
+            return
+
+        # Send message to user with data from API
+        response = (
+            f"{product_data['name']}\n\n"
+            f"Артикул: {product_data['artikul']}\n"
+            f"На всех складах: {product_data['total_quantity']} шт\n" 
+            f"Рейтинг: {product_data['rating']}\n"
+            f"Цена cо скидкой: {product_data['price']}₽"
+        )
+        await message.answer(response, reply_markup=get_main_keyboard())
+
+        # Upsert product data to database
         async with SessionLocal() as db:
-            product = await get_product_by_artikul(db, artikul)
-            if product:
-                response = (
-                    f"{product.name}\n\n"
-                    f"Артикул: {product.artikul}\n"
-                    f"На всех складах: {product.total_quantity} шт\n" 
-                    f"Рейтинг: {product.rating}\n"
-                    f"Цена cо скидкой: {product.price}₽"
-                )
-                await message.answer(response, reply_markup=get_main_keyboard())
+            existing_product = await get_product_by_artikul(db, artikul)
+            if existing_product:
+                await update_product(db, existing_product, product_data)
             else:
-                await message.answer("Товар не найден!", reply_markup=get_main_keyboard())
+                await create_product(db, product_data)
+
     except ValueError:
         await message.answer("Введите правильный номер артикула!", reply_markup=get_main_keyboard())
     except Exception as e:
