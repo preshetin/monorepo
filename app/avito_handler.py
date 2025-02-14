@@ -1,6 +1,7 @@
 from typing import Dict
 import aiohttp
 from fastapi import HTTPException
+from .parsers.avito_parser import extract_description
 
 
 async def fetch_avito_listing(url: str) -> Dict:
@@ -22,11 +23,13 @@ async def fetch_avito_listing(url: str) -> Dict:
                         detail="Failed to fetch Avito listing"
                     )
 
-                # For now, return basic response
-                # TODO: Implement actual parsing logic
+                html_content = await response.text()
+                description = await extract_description(html_content)
+
                 return {
                     "url": url,
                     "status": "success",
+                    "description": description or "Description not found",
                     "message": "Listing fetched successfully"
                 }
 
