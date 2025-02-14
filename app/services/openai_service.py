@@ -1,9 +1,16 @@
+import os
+from dotenv import load_dotenv
 import json
 import aiohttp
 from typing import Dict
 from fastapi import HTTPException
 
+env_path = os.path.join(os.path.dirname(__file__), '../..', '.env')
+load_dotenv(env_path)
+
 # Should be moved to environment variables
+
+API_KEY = os.getenv("OPENAI_API_KEY")
 OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
 
 
