@@ -2,6 +2,7 @@ from typing import Dict
 import aiohttp
 from fastapi import HTTPException
 from .parsers.avito_parser import extract_description
+from .services.openai_service import analyze_description
 
 
 async def fetch_avito_listing(url: str) -> Dict:
@@ -26,10 +27,14 @@ async def fetch_avito_listing(url: str) -> Dict:
                 html_content = await response.text()
                 description = await extract_description(html_content)
 
+                # Analyze the description using OpenAI
+                analysis_result = await analyze_description(description)
+
                 return {
                     "url": url,
                     "status": "success",
                     "description": description or "Description not found",
+                    "analysis": analysis_result,
                     "message": "Listing fetched successfully"
                 }
 
