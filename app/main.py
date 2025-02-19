@@ -9,6 +9,7 @@ from aiogram import types
 from .crud import get_product_by_artikul, create_product, update_product
 from .scheduler import start_scheduler, schedule_product_update
 import aiohttp
+from .petya_vpn_bot_webhook import handle_petya_vpn_webhook  # Import the handler
 from .avito_handler import fetch_avito_listing
 
 app = FastAPI()
@@ -43,11 +44,21 @@ async def telegram_webhook(update: dict):
     return {"ok": True}
 
 
+@app.post("/api/v1/webhook_test")
+async def telegram_webhook_test(update: dict):
+    return {"ok": True}
+
+
+@app.post("/api/petya-vpn/webhook-test")
+async def petya_vpn_webhook_test(update: dict):
+    await handle_petya_vpn_webhook(update)
+    return {"ok": True}
+
+
 @app.post("/api/petya_vpn/webhook")
 async def petya_vpn_webhook(update: dict):
-    from .petya_vpn_bot_webhook import handle_petya_vpn_webhook  # Import the handler
     await handle_petya_vpn_webhook(update)
-    return {"message": "Welcome! Core functionality will be soon."}
+    return {"ok": True}
 
 
 @app.post("/api/v1/products", response_model=ProductResponse)

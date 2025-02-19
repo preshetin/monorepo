@@ -14,6 +14,8 @@ bot = Bot(token=TELEGRAM_BOT_TOKEN)
 
 
 async def handle_petya_vpn_webhook(update: dict):
+    print("Handling Petya VPN webhook...")
+    print('update:', update)
     telegram_update = types.Update(**update)
 
     # If a message exists then record details and send slack alert
