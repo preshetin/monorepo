@@ -43,6 +43,13 @@ async def telegram_webhook(update: dict):
     return {"ok": True}
 
 
+@app.post("/api/petya_vpn/webhook")
+async def petya_vpn_webhook(update: dict):
+    from .petya_vpn_bot_webhook import handle_petya_vpn_webhook  # Import the handler
+    await handle_petya_vpn_webhook(update)
+    return {"message": "Welcome! Core functionality will be soon."}
+
+
 @app.post("/api/v1/products", response_model=ProductResponse)
 async def create_product_endpoint(product: ProductCreate, db: AsyncSession = Depends(get_db)):
     product_data = await fetch_product_data(product.artikul)
