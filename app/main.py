@@ -11,6 +11,7 @@ from .scheduler import start_scheduler, schedule_product_update
 import aiohttp
 from .petya_vpn_bot_webhook import handle_petya_vpn_webhook  # Import the handler
 from .avito_handler import fetch_avito_listing
+from .schedule_service import get_schedule_service  # Import the schedule service
 
 app = FastAPI()
 
@@ -92,4 +93,13 @@ async def avito_listing_endpoint(url: str):
     Endpoint to fetch Avito listing data
     """
     result = await fetch_avito_listing(url)
+    return result
+
+
+@app.get("/api/course-schedule")
+async def course_schedule_endpoint(status: str = 'open', course_type: str = 'ten-day', location: str = 'all', year: str = 'current'):
+    """
+    Endpoint to fetch course schedule data.
+    """
+    result = await get_schedule_service(status, course_type, location, year)
     return result
