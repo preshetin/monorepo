@@ -160,7 +160,7 @@ async def build_courses_list_from_table(soup, course_group):
             "type": tds[2].find('a').get_text(strip=True),
             "status": status,
             "location": tds[4].get_text(strip=True),
-            "description": tds[5].get_text(strip=True),
+            "description": tds[5].get_text().replace('\n', ' ').strip(),
         }
 
         courses.append(course)
