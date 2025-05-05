@@ -139,11 +139,26 @@ async def build_courses_list_from_table(soup, course_group):
         if len(tds) < 6:
             continue
 
+        date_start = tds[1].find_all('span')[0].get_text(strip=True)
+
+        status_spans = tds[3].find_all('span', class_='status')
+        status = {}
+        for span in status_spans:
+            text = span.get_text(strip=True)
+            parts = text.split(' - ')
+            if len(parts) == 2:
+                key = parts[0].strip()
+                value = parts[1].strip()
+                status[key] = value
+            else:
+                status = text
+
         course = {
             "application_url": url,
             "date": tds[1].get_text(strip=True),
+            "date_start": date_start,
             "type": tds[2].get_text(strip=True),
-            "status": tds[3].get_text(strip=True),
+            "status": status,
             "location": tds[4].get_text(strip=True),
             "description": tds[5].get_text(strip=True),
             "block": course_group['block'],
