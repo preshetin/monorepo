@@ -1,5 +1,6 @@
 import aiohttp
 from bs4 import BeautifulSoup
+from datetime import datetime
 
 
 async def get_schedule_service(status, course_type='ten-day', location='all', year='current'):
@@ -139,7 +140,7 @@ async def build_courses_list_from_table(soup, course_group):
         if len(tds) < 6:
             continue
 
-        date_start = tds[1].find_all('span')[0].get_text(strip=True)
+        date_text = tds[1].get_text(strip=True)
 
         status_spans = tds[3].find_all('span', class_='status')
         status = {}
@@ -155,14 +156,11 @@ async def build_courses_list_from_table(soup, course_group):
 
         course = {
             "application_url": url,
-            "date": tds[1].get_text(strip=True),
-            "date_start": date_start,
-            "type": tds[2].get_text(strip=True),
+            "date_text": date_text,
+            "type": tds[2].find('a').get_text(strip=True),
             "status": status,
             "location": tds[4].get_text(strip=True),
             "description": tds[5].get_text(strip=True),
-            "block": course_group['block'],
-            "year": course_group['year']
         }
 
         courses.append(course)
